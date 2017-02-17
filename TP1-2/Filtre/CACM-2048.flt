@@ -1,0 +1,1 @@
+comparison of several adaptive newtoncotes quadrature routines in evaluating definite integrals with peaked integrands this report compares the performance of five different adaptive quadrature  schemes based on newtoncotes 2n  1 point rules n  1 2 3 4 5 in approximating the set of definite integrals integral1x2  p2 dx with  relative accuracy e cacm june 1970 hillstrom k e
