@@ -1,1 +1,0 @@
-insertions and deletions in onesided heightbalanced trees recently hirschberg has established that insertions into onesided heightbalanced trees can  be done in 0log2n steps  it is proved here that deletions can also be performed in 0log2n steps  which answers the open problem posed by hirschberg cacm march 1978 kosaraju sr
