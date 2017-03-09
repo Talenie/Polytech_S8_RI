@@ -38,6 +38,43 @@ sub ExtractionDesFichiers($$)
   close(F);
 }
 
+sub ExtractionDesRequetes($$)
+{
+   my ($FileName,$Path)=@_; # Tableau des paramètres 
+   open(F,$FileName) || die "Erreur d'ouverture du fichier $FileName\n";
+   my $str="";
+   my $Num=0;
+
+   open(COL,">$Path/Collection") || die "Erreur de creation de Collection\n";
+   while(!eof(F)){
+     if($str =~m /\.I\s/){ # On regarde si s$tr contient la chaîne .I
+        close(NF);
+        $str =~s/\.I\s//g; # Dans $str, on supprime la chaîne .I avant le numéro de document
+        $Num=$str;
+        print COL "RQ-$Num\n";
+        print "Processing ... RQ-$Num\n";
+        open(NF,">$Path/RQ-$Num");
+     }
+     if(($str=~ m/\.T/) || ($str=~ m/\.A/) || ($str=~ m/\.W/) || ($str=~ m/\.B/)) { # Si $str contient une des balises que l'on veut 
+        $Go=1;
+        while($Go==1){  # Tant que l'on ne rencontre pas une nouvelle balise
+           chop($str=<F>);
+           if(($str eq "\.W") || ($str eq "\.B") || ($str eq "\.N") || ($str eq "\.A") || ($str eq "\.X") || ($str eq "\.K") || ($str eq "\.T") || ($str eq "\.I")){
+             $Go=0;
+             break;
+           }
+           else{
+             print NF "$str "; # On écrit le contenu dans le fichier RQ-XX
+           }
+        }
+     }
+     else{
+       chop($str=<F>);
+     }
+  }
+  close(F);
+}
+
 sub FiltrerAlphanum($)
 {
 	my($Path)= @_;
@@ -46,6 +83,26 @@ sub FiltrerAlphanum($)
     while($i <= 3204){
 		open(FS,"$Path/CACM-$i") || die "Erreur d'ouverture du fichier CACM-$i\n";
 		open(FLT,">Filtre/CACM-$i.flt") || die "Erreur de creation de CACM-$i.flt\n";
+		
+		while(chop($str=<FS>)){
+			$str = lc( $str );
+			$str =~ s/(\,|\=|\/|\.|\?|\'|\(|\)|\_|\$|\%|\+|\[|\]|\{|\}|\&|\;|\:|\~|\!|\@|\#|\^|\*|\||\<|\>|\-|\\s|\\|\")//g;
+			print FLT "$str";
+		}
+		close(F);
+		close(FLT);
+		$i = $i +1;
+	}
+}
+
+sub RequetesFiltrerAlphanum($)
+{
+	my($Path)= @_;
+	my $i = 1;
+	my $str="1";
+    while($i <= 64){
+		open(FS,"$Path/RQ-$i") || die "Erreur d'ouverture du fichier RQ-$i\n";
+		open(FLT,">RQFiltre/RQ-$i.flt") || die "Erreur de creation de RQ-$i.flt\n";
 		
 		while(chop($str=<FS>)){
 			$str = lc( $str );
@@ -83,6 +140,41 @@ sub createVoc($)
 	
 	while( my ($mot, $val) = each %voc){
 		print FV "$mot\n";
+	}
+}
+
+sub RequeteStopWords($$)
+{
+	my($Path,$StopFile)= @_;
+	my $i = 1;
+	my $str="1";
+	
+	
+	open(FST,"$StopFile") || die "Erreur ouverture de $StopFile";
+	
+	my %stop_words;
+	
+	while(chop($word=<FST>)){
+		$stop_words{$word} = 1;
+	}
+	
+    while($i <= 64){
+		open(FS,"$Path/RQ-$i.flt") || die "Erreur d'ouverture du fichier $Path/RQ-$i.flt\n";
+		open(FLT,">RQSTP/RQ-$i.stp") || die "Erreur de creation de RQ-$i.plt\n";
+		
+		while(<FS>){
+			for $mot (split){
+				if (exists $stop_words{$mot}){
+					#print "Enleve : $mot\n";
+				} else {
+					#print "Garde : $str\n";
+					print FLT "$mot ";
+				}
+			}
+		}
+		close(F);
+		close(FLT);
+		$i = $i +1;
 	}
 }
 
@@ -211,10 +303,7 @@ sub representation_binaire($$)
 # MAIN PROG #
 #############
 
-ExtractionDesFichiers("cacm.all","Docs");
-FiltrerAlphanum("Docs");
-StopWords("Filtre","common_words");
-createVoc("STP");
-create_df("STP","vocabulaire");
-representation_binaire("vocabulaire","STP");
+ExtractionDesRequetes("query.text","Reqs");
+RequetesFiltrerAlphanum("Reqs");
+RequeteStopWords("RQFiltre","common_words");
 
