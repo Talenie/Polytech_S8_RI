@@ -17,10 +17,6 @@ sub representation_binaire($$)
 	}
 	close(FS);
 	
-	#while( my ($ind, $val) = each %voc){
-	#	print "$ind : $val\n";
-	#}
-	
 	open(F,"$file_doc") || die "Erreur d'ouverture du fichier $file_doc\n";
 	
 	while(<F>){
@@ -36,17 +32,16 @@ sub representation_binaire($$)
 	}
 }
 
-sub representation_frequentielle($$)
+sub representation_frequentielle($$$)
 {
-	my($file_voc,$file_doc)= @_;
+	my($file_voc,$file_df,$file_doc)= @_;
 		
 	my %rep;
 	my %voc;
+	my %df;
 	
 	open(FS,"$file_voc") || die "Erreur d'ouverture du fichier $file_voc\n";
-	
 	my $i = 1;
-	
 	while(<FS>){
 		for $mot (split){
 			$voc{$mot} = $i;
@@ -55,20 +50,20 @@ sub representation_frequentielle($$)
 	}
 	close(FS);
 	
-	#while( my ($ind, $val) = each %voc){
-	#	print "$ind : $val\n";
-	#}
-	
+	open(FD,"$file_df") || die "Erreur d'ouverture du fichier $file_df\n";
+	while(<FD>){
+		chomp :
+			my @mots = split(/ /);
+			$df{$mots[1]} = $mots[0];
+	}
+	close(FD);
+		
 	open(F,"$file_doc") || die "Erreur d'ouverture du fichier $file_doc\n";
 	
 	while(<F>){
 		for $mot (split){
 			$indice = $voc{$mot};
-			if(exists $rep{$indice}) {
-				$rep{$indice} = $rep{$indice}+1;
-			} else {
-			$rep{$indice} = 1;
-			}
+			$rep{$indice} = $df{$mot};
 		}
 	}
 	close(F);
@@ -78,6 +73,4 @@ sub representation_frequentielle($$)
 	}
 }
 
-
-
-representation_frequentielle("vocabulaire","STP/CACM-689.stp");
+representation_frequentielle("vocabulaire","document_frequency","STP/CACM-689.stp");
