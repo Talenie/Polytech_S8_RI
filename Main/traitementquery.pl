@@ -38,7 +38,7 @@ sub ExtractionDesFichiers($$)
   close(F);
 }
 
-sub ExtractionDesQuerys($$)
+sub ExtractionDesRequetes($$)
 {
    my ($FileName,$Path)=@_; # Tableau des paramètres 
    open(F,$FileName) || die "Erreur d'ouverture du fichier $FileName\n";
@@ -51,9 +51,9 @@ sub ExtractionDesQuerys($$)
         close(NF);
         $str =~s/\.I\s//g; # Dans $str, on supprime la chaîne .I avant le numéro de document
         $Num=$str;
-        print COL "Query-$Num\n";
-        print "Processing ... Query-$Num\n";
-        open(NF,">$Path/Query-$Num");
+        print COL "RQ-$Num\n";
+        print "Processing ... RQ-$Num\n";
+        open(NF,">$Path/RQ-$Num");
      }
      if(($str=~ m/\.T/) || ($str=~ m/\.A/) || ($str=~ m/\.W/) || ($str=~ m/\.B/)) { # Si $str contient une des balises que l'on veut 
         $Go=1;
@@ -64,7 +64,7 @@ sub ExtractionDesQuerys($$)
              break;
            }
            else{
-             print NF "$str "; # On écrit le contenu dans le fichier CACM-XX
+             print NF "$str "; # On écrit le contenu dans le fichier RQ-XX
            }
         }
      }
@@ -95,14 +95,14 @@ sub FiltrerAlphanum($)
 	}
 }
 
-sub FiltrerAlphanumQuery($)
+sub RequetesFiltrerAlphanum($)
 {
 	my($Path)= @_;
 	my $i = 1;
 	my $str="1";
     while($i <= 64){
-		open(FS,"$Path/Query-$i") || die "Erreur d'ouverture du fichier Query-$i\n";
-		open(FLT,">FiltreQ/Query-$i.flt") || die "Erreur de creation de Query-$i.flt\n";
+		open(FS,"$Path/RQ-$i") || die "Erreur d'ouverture du fichier RQ-$i\n";
+		open(FLT,">RQFiltre/RQ-$i.flt") || die "Erreur de creation de RQ-$i.flt\n";
 		
 		while(chop($str=<FS>)){
 			$str = lc( $str );
@@ -143,6 +143,41 @@ sub createVoc($)
 	}
 }
 
+sub RequeteStopWords($$)
+{
+	my($Path,$StopFile)= @_;
+	my $i = 1;
+	my $str="1";
+	
+	
+	open(FST,"$StopFile") || die "Erreur ouverture de $StopFile";
+	
+	my %stop_words;
+	
+	while(chop($word=<FST>)){
+		$stop_words{$word} = 1;
+	}
+	
+    while($i <= 64){
+		open(FS,"$Path/RQ-$i.flt") || die "Erreur d'ouverture du fichier $Path/RQ-$i.flt\n";
+		open(FLT,">RQSTP/RQ-$i.stp") || die "Erreur de creation de RQ-$i.plt\n";
+		
+		while(<FS>){
+			for $mot (split){
+				if (exists $stop_words{$mot}){
+					#print "Enleve : $mot\n";
+				} else {
+					#print "Garde : $str\n";
+					print FLT "$mot ";
+				}
+			}
+		}
+		close(F);
+		close(FLT);
+		$i = $i +1;
+	}
+}
+
 sub StopWords($$)
 {
 	my($Path,$StopFile)= @_;
@@ -177,42 +212,6 @@ sub StopWords($$)
 		$i = $i +1;
 	}
 }
-
-sub StopWordsQuery($$)
-{
-	my($Path,$StopFile)= @_;
-	my $i = 1;
-	my $str="1";
-	
-	
-	open(FST,"$StopFile") || die "Erreur ouverture de $StopFile";
-	
-	my %stop_words;
-	
-	while(chop($word=<FST>)){
-		$stop_words{$word} = 1;
-	}
-	
-    while($i <= 64){
-		open(FS,"$Path/Query-$i.flt") || die "Erreur d'ouverture du fichier $Path/Query-$i.flt\n";
-		open(FLT,">STPQ/Query-$i.stp") || die "Erreur de creation de Query-$i.plt\n";
-		
-		while(<FS>){
-			for $mot (split){
-				if (exists $stop_words{$mot}){
-					#print "Enleve : $mot\n";
-				} else {
-					#print "Garde : $str\n";
-					print FLT "$mot ";
-				}
-			}
-		}
-		close(F);
-		close(FLT);
-		$i = $i +1;
-	}
-}
-
 
 sub create_df($$)
 {
@@ -300,69 +299,11 @@ sub representation_binaire($$)
 	}
 	
 }
-
-sub representation_binaire_query($$)
-{
-	my($file_voc,$Path)= @_;
-		
-	my %voc;
-	
-	open(FS,"$file_voc") || die "Erreur d'ouverture du fichier $file_voc\n";
-	my $i = 1;
-	while(<FS>){
-		for $mot (split){
-			$voc{$mot} = $i;
-			$i = $i+1;
-		}
-	}
-	close(FS);
-	
-	
-	$i = 1;
-	while($i <= 64){
-		open(F,"$Path/Query-$i.stp") || die "Erreur d'ouverture du fichier $Path/Query-$i.stp\n";
-		my %rep;
-		my %rep_fq;
-		while(<F>){
-			for $mot (split){
-				$indice = $voc{$mot};
-				$rep{$indice} = 1;
-				$rep_fq{$indice} = $rep_fq{$indice} + 1 ;
-			}
-		}
-		close(F);
-		
-		open(FREP,">RepresentationsQuery/Query-$i.bi") || die "Erreur de creation du fichier Representations/CACM-$i.bi\n";
-		foreach my $indice (sort {$a <=> $b} keys %rep) {
-			print FREP "$indice:$rep{$indice}\n";
-		}
-		
-		close(FREP);
-		
-		
-		open(FREQ,">RepresentationsQuery/Query-$i.fq") || die "Erreur de creation du fichier Representations/CACM-$i.fq\n";
-		foreach my $indice (sort {$a <=> $b} keys %rep) {
-			print FREQ "$indice:$rep_fq{$indice}\n";
-		}
-		
-		close(FREQ);
-		$i = $i+1;
-	}
-	
-}
 #############
 # MAIN PROG #
 #############
 
-ExtractionDesFichiers("cacm.all","Docs");
-FiltrerAlphanum("Docs");
-StopWords("Filtre","common_words");
-createVoc("STP");
-create_df("STP","vocabulaire");
-representation_binaire("vocabulaire","STP");
-ExtractionDesQuerys("query.text","Querys");
-FiltrerAlphanumQuery("Querys");
-StopWordsQuery("FiltreQ","common_words");
-representation_binaire_query("vocabulaire","STPQ");
-
+ExtractionDesRequetes("query.text","Reqs");
+RequetesFiltrerAlphanum("Reqs");
+RequeteStopWords("RQFiltre","common_words");
 
