@@ -211,11 +211,11 @@ sub representation_binaire($$)
 # MAIN PROG #
 #############
 
-#ExtractionDesFichiers("cacm.all","Docs");
-#FiltrerAlphanum("Docs");
-#StopWords("Filtre","common_words");
-#createVoc("STP");
-#create_df("STP","vocabulaire");
+ExtractionDesFichiers("cacm.all","Docs");
+FiltrerAlphanum("Docs");
+StopWords("Filtre","common_words");
+createVoc("STP");
+create_df("STP","vocabulaire");
 representation_binaire("vocabulaire","STP");
 
 
