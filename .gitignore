@@ -6,6 +6,6 @@ Main/Docs/*
 Main/Filtre/*
 Main/STP/*
 Main/Representations/*
-Main/FiltreQ
-Main/STPQ
-
+Main/FiltreQ/*
+Main/STPQ/*
+Main/RepresentationsQuery/*
