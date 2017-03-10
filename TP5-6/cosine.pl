@@ -2,6 +2,8 @@ sub cosine($$) {
 	
 	my ($fdocument,$fquery)=@_; # Tableau des paramètres 
 	
+	#print "Running cosine $fdocument\n";
+	
 	my %doc;
 	my $sumSquareDoc = 0;
 	open(FD,"$fdocument") || die "Erreur d'ouverture du fichier $fdocument\n";
@@ -14,7 +16,7 @@ sub cosine($$) {
 	}
 	close(FD);
 	
-	print "SquareSum  : $sumSquareDoc \n";
+	#print "SquareSum  : $sumSquareDoc \n";
 	
 	my %query;
 	my $sumSquareQuery = 0;
@@ -26,9 +28,9 @@ sub cosine($$) {
 			$sumSquareQuery += $content[2]**2;
 		}
 	}
-	close(FD);
+	close(FQ);
 	
-	print "SquareSum  : $sumSquareQuery \n";
+	#print "SquareSum  : $sumSquareQuery \n";
 	
 	my $prodsc = 0;
 	while( my ($wordid, $val) = each %query){
@@ -37,14 +39,41 @@ sub cosine($$) {
 		}	
 	}
 	
-	print "$prodsc\n";
+	#print "$prodsc\n";
 	$sqrtDQ = sqrt($sumSquareDoc*$sumSquareQuery);
-	print "$sqrtDQ\n";
-	$res = $prodsc/$sqrtDQ;
-	print "$res\n";
+	#print "$sqrtDQ\n";
+	if($sqrtDQ==0) {
+		$res = 0;
+	} else {
+		$res = $prodsc/$sqrtDQ;
+	}
+	#print "$res\n";
 	
 	return $res;
 	
 }
 
-cosine($ARGV[0], $ARGV[1]);
+sub rank($$$) {
+
+	my($nb, $dir, $query) = @_;	
+	my @files = glob( $dir . '/*' );
+	
+	my %ranking;
+	
+	foreach my $filename (@files) {
+		$ranking{$filename} = cosine($filename, $query);
+	}
+	
+	my $rank = 0;
+	print "rank	doc					proba\n";
+	foreach my $key (reverse sort values %ranking) {
+		if($rank++ < $nb) {
+			print "$rank.	$key		$ranking{$key}\n";
+		};
+	}
+	
+	
+}
+
+#cosine($ARGV[0], $ARGV[1]);
+rank($ARGV[0], $ARGV[1], $ARGV[2]);
