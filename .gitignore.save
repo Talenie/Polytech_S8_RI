@@ -1,0 +1,16 @@
+/Cours/
+TP1-2/Doc/*
+TP1-2/Filtre/*
+TP3-4/STP/*
+Main/Docs/*
+Main/Filtre/*
+Main/STP/*
+Main/Representations/*
+
+Main/FiltreQ/*
+Main/STPQ/*
+Main/RepresentationsQuery/*
+/Reqs/*
+Main/RQFiltre/*
+Main/RQSTP/*
+>>>>>>> 52db156df1c3d58356d15e536c94479304441de6
