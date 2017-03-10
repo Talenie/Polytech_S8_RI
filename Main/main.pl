@@ -218,9 +218,11 @@ sub representations($$$$$$)
 		my %rep_fq;
 		while(<F>){
 			for $mot (split){
-				$indice = $voc{$mot};
-				$rep{$indice} = 1;
-				$rep_fq{$indice} = $rep_fq{$indice} + 1 ;
+				if(exists $voc{$mot}){
+					$indice = $voc{$mot};
+					$rep{$indice} = 1;
+					$rep_fq{$indice} = $rep_fq{$indice} + 1 ;
+				}
 			}
 		}
 		close(F);
@@ -244,55 +246,6 @@ sub representations($$$$$$)
 	
 }
 
-sub representation_binaire_query($$)
-{
-	my($file_voc,$Path)= @_;
-		
-	my %voc;
-	
-	open(FS,"$file_voc") || die "Erreur d'ouverture du fichier $file_voc\n";
-	my $i = 1;
-	while(<FS>){
-		for $mot (split){
-			$voc{$mot} = $i;
-			$i = $i+1;
-		}
-	}
-	close(FS);
-	
-	
-	$i = 1;
-	while($i <= 64){
-		open(F,"$Path/Query-$i.stp") || die "Erreur d'ouverture du fichier $Path/Query-$i.stp\n";
-		my %rep;
-		my %rep_fq;
-		while(<F>){
-			for $mot (split){
-				$indice = $voc{$mot};
-				$rep{$indice} = 1;
-				$rep_fq{$indice} = $rep_fq{$indice} + 1 ;
-			}
-		}
-		close(F);
-		
-		open(FREP,">RepresentationsQuery/Query-$i.bi") || die "Erreur de creation du fichier Representations/CACM-$i.bi\n";
-		foreach my $indice (sort {$a <=> $b} keys %rep) {
-			print FREP "$indice:$rep{$indice}\n";
-		}
-		
-		close(FREP);
-		
-		
-		open(FREQ,">RepresentationsQuery/Query-$i.fq") || die "Erreur de creation du fichier Representations/CACM-$i.fq\n";
-		foreach my $indice (sort {$a <=> $b} keys %rep) {
-			print FREQ "$indice:$rep_fq{$indice}\n";
-		}
-		
-		close(FREQ);
-		$i = $i+1;
-	}
-	
-}
 #############
 # MAIN PROG #
 #############
