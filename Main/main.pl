@@ -186,21 +186,36 @@ sub create_df($$$$$)
 
 
 
-sub representations($$$$$$)
+sub representations($$$$$$$$)
 {
-	my($Voc,$PathIn,$Name,$Num,$PathBi,$PathFq)= @_;
+	my($Voc,$DF,$PathIn,$Name,$Num,$PathBi,$PathFq,$PathTF)= @_;
 		
 	my %voc;
+	my %reverse;
 	
 	open(FS,"$Voc") || die "Erreur d'ouverture du fichier $Voc\n";
 	my $i = 1;
 	while(<FS>){
 		for $mot (split){
 			$voc{$mot} = $i;
+			$reverse{$i} = $mot;
 			$i = $i+1;
 		}
 	}
 	close(FS);
+	
+	my %df;
+	
+	open(FDF,"$DF") || die "Erreur d'ouverture du fichier $DF\n";
+	my $i = 1;
+	my $str = "";
+	while($str=<FDF>){
+		my @words = split / /,$str;
+		$val = $words[0];
+		$mot = $words[1];
+		$df{$mot} = $val;
+	}
+	close(FDF);
 	
 	# Si le $Path n'existe pas on le crée
 	if (!(-d $PathBi)){
@@ -209,6 +224,10 @@ sub representations($$$$$$)
 	# Si le $Path n'existe pas on le crée
 	if (!(-d $PathFq)){
 		system("mkdir $PathFq");
+	}
+	# Si le $Path n'existe pas on le crée
+	if (!(-d $PathTF)){
+		system("mkdir $PathTF");
 	}
 	
 	$i = 1;
@@ -231,16 +250,25 @@ sub representations($$$$$$)
 		foreach my $indice (sort {$a <=> $b} keys %rep) {
 			print FREP "$indice:$rep{$indice}\n";
 		}
-		
 		close(FREP);
 		
 		
 		open(FREQ,">$PathFq/$Name-$i.fq") || die "Erreur de creation du fichier $PathFq/$Name-$i.fq\n";
-		foreach my $indice (sort {$a <=> $b} keys %rep) {
+		foreach my $indice (sort {$a <=> $b} keys %rep_fq) {
 			print FREQ "$indice:$rep_fq{$indice}\n";
 		}
-		
 		close(FREQ);
+		
+		open(FRET,">$PathTF/$Name-$i.tfid") || die "Erreur de creation du fichier $PathTF/$Name-$i.tfid\n";
+		foreach my $indice (sort {$a <=> $b} keys %rep_fq) {
+			print $reverse{$indice};
+			if(exists $reverse{$indice} && $df{$reverse{$indice}}!=0){
+				my $tfid = ($rep_fq{$indice}*log($Num/$df{$reverse{$indice}}));
+				print FRET "$indice:$tfid\n";
+			}
+		}
+		close(FRET);
+				
 		$i = $i+1;
 	}
 	
@@ -255,11 +283,12 @@ FiltrerAlphanum("Docs","CACM","Filtre",3204);
 StopWords("Filtre","CACM",3204,"common_words","STP");
 createVoc("STP","vocabulaire");
 create_df("STP","CACM",3204,"vocabulaire","document_frequency");
-representations("vocabulaire","STP","CACM",3204,"RepBi","RepFq");
+representations("vocabulaire","document_frequency","STP","CACM",3204,"RepBi","RepFq","RepTFID");
 
 ExtractionDesFichiers("query.text","Querys","Query");
 FiltrerAlphanum("Querys","Query","FiltreQ",64);
 StopWords("FiltreQ","Query",64,"common_words","STPQ");
-representations("vocabulaire","STPQ","Query",64,"RepBiQ","RepFqQ");
+representations("vocabulaire","document_frequency","STPQ","Query",64,"RepBiQ","RepFqQ","None");
+system("rm -r None");
 
 
