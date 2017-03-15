@@ -261,7 +261,7 @@ sub representations($$$$$$$$)
 		
 		open(FRET,">$PathTF/$Name-$i.tfid") || die "Erreur de creation du fichier $PathTF/$Name-$i.tfid\n";
 		foreach my $indice (sort {$a <=> $b} keys %rep_fq) {
-			print $reverse{$indice};
+			#print $reverse{$indice};
 			if(exists $reverse{$indice} && $df{$reverse{$indice}}!=0){
 				my $tfid = ($rep_fq{$indice}*log($Num/$df{$reverse{$indice}}));
 				print FRET "$indice:$tfid\n";

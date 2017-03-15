@@ -65,10 +65,17 @@ sub rank($$$) {
 	}
 	
 	my $rank = 0;
+	
+	my %reverseRanking;
+	foreach my $key (keys %ranking) {
+		$reverseRanking{$ranking{$key}} = $key;
+	}
+	
 	print "rank	doc					proba\n";
-	foreach my $key (reverse sort values %ranking) {
+	foreach my $value (reverse sort values %ranking) {
 		if($rank++ < $nb) {
-			print "$rank.	$key		$ranking{$key}\n";
+			$key = $reverseRanking{$value};
+			print "$rank.	$key	$value\n";
 		};
 	}
 	
