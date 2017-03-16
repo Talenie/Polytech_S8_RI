@@ -12,3 +12,9 @@ Main/RepresentationsQuery/*
 Main/Reqs/*
 Main/RQFiltre/*
 Main/RQSTP/*
+Main/Querys/
+Main/RepBi/
+Main/RepBiQ/
+Main/RepFq/
+Main/RepFqQ/
+RepTFID/
