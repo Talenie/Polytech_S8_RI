@@ -209,10 +209,11 @@ sub representations($$$$$$$$)
 	open(FDF,"$DF") || die "Erreur d'ouverture du fichier $DF\n";
 	my $i = 1;
 	my $str = "";
-	while($str=<FDF>){
+	while(chop($str=<FDF>)){
 		my @words = split / /,$str;
 		$val = $words[0];
 		$mot = $words[1];
+		$mot =~ s/^\n//;
 		$df{$mot} = $val;
 	}
 	close(FDF);
@@ -262,16 +263,15 @@ sub representations($$$$$$$$)
 		
 		open(FRET,">$PathTF/$Name-$i.tfid") || die "Erreur de creation du fichier $PathTF/$Name-$i.tfid\n";
 		foreach my $indice (sort {$a <=> $b} keys %rep_fq) {
-			my $mot = $reverse{$indice};
-			my $docF = $df{$mot};
-			print "$mot : df = $docF\n";
+			my $word = $reverse{$indice};
+			my $docF = $df{$word};
 			if($docF!=0){
 				my $tfid = ($rep_fq{$indice}*log($Num/$docF));
 				print FRET "$indice:$tfid\n";
 			}
 		}
 		close(FRET);
-				
+		
 		$i = $i+1;
 	}
 	
