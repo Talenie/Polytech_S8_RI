@@ -217,6 +217,7 @@ sub representations($$$$$$$$)
 	}
 	close(FDF);
 	
+	
 	# Si le $Path n'existe pas on le crée
 	if (!(-d $PathBi)){
 		system("mkdir $PathBi");
@@ -261,9 +262,11 @@ sub representations($$$$$$$$)
 		
 		open(FRET,">$PathTF/$Name-$i.tfid") || die "Erreur de creation du fichier $PathTF/$Name-$i.tfid\n";
 		foreach my $indice (sort {$a <=> $b} keys %rep_fq) {
-			print $reverse{$indice};
-			if(exists $reverse{$indice} && $df{$reverse{$indice}}!=0){
-				my $tfid = ($rep_fq{$indice}*log($Num/$df{$reverse{$indice}}));
+			my $mot = $reverse{$indice};
+			my $docF = $df{$mot};
+			print "$mot : df = $docF\n";
+			if($docF!=0){
+				my $tfid = ($rep_fq{$indice}*log($Num/$docF));
 				print FRET "$indice:$tfid\n";
 			}
 		}
