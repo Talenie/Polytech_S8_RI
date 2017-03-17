@@ -4,7 +4,9 @@
 #include <string.h>
 #include <strings.h>
 
-#include "rdjpeg.h"
+
+#include "histogrammes.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -45,6 +47,10 @@ int main(int argc, char *argv[])
     printf("\n");
   }
   /*------------------------------------------------*/
+	
+	float* hist = create_histo(argv[1]);
+	
+	printf("NBIN : %d\n",NBIN);
 
   exit(0);
 }
