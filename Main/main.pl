@@ -103,9 +103,8 @@ sub StopWords($$$$$)
 		while(<FS>){
 			for $mot (split){
 				if (exists $stop_words{$mot}){
-					#print "Enleve : $mot\n";
+					# Enleve le mot
 				} else {
-					#print "Garde : $str\n";
 					print FLT "$mot ";
 				}
 			}
@@ -117,6 +116,7 @@ sub StopWords($$$$$)
 }
 
 # Crée un vocabulaire a partir des fichiers dans Path et les place dans Name
+# Paramètres : Chemin des fichiers de la collection, nom du fichier de vocabulaire en sortie
 sub createVoc($$)
 {
 	my($Path,$Name)= @_;
@@ -146,6 +146,12 @@ sub createVoc($$)
 }
 
 # Crée la DF d'une collection de fichiers
+# Paramètres
+#	Chemin de la collection
+#	Nom des fichiers de la collection
+#	Nombre de fichiers
+# 	Document du vocabulaire
+#	Nom de fichier de sortie
 sub create_df($$$$$)
 {
 	my($Path,$Name,$Num,$vocFile,$outFile)= @_;
@@ -164,6 +170,7 @@ sub create_df($$$$$)
 		close(FS);
 		
 		while( my ($mot, $val) = each %doc){
+			# Si le mot a été deja vu on ajoute 1 au df sinon on initialise à 1 (vu 1 fois)
 			if(exists $voc{$mot}){
 				$voc{$mot} = $voc{$mot} + 1;
 			} else {
@@ -185,7 +192,15 @@ sub create_df($$$$$)
 
 
 
-
+# Paramètres
+# 	Document du vocabulaire
+#	Document contenant les document frequency
+#	Chemin de la collection
+#	Nom des fichiers de la collection
+#	Nombre de fichiers
+#	Chemin de sortie des représentations binaires
+#	Chemin de sortie des représentations fréquentielles
+#	Chemin de sortie des représentations tfidf
 sub representations($$$$$$$$)
 {
 	my($Voc,$DF,$PathIn,$Name,$Num,$PathBi,$PathFq,$PathTF)= @_;
@@ -248,6 +263,7 @@ sub representations($$$$$$$$)
 		}
 		close(F);
 		
+		# on écrit la représentation binaire
 		open(FREP,">$PathBi/$Name-$i.bi") || die "Erreur de creation du fichier $PathBi/$Name-$i.bi\n";
 		foreach my $indice (sort {$a <=> $b} keys %rep) {
 			print FREP "$indice:$rep{$indice}\n";
@@ -255,15 +271,18 @@ sub representations($$$$$$$$)
 		close(FREP);
 		
 		
+		# on écrit la représentation fréquentielle
 		open(FREQ,">$PathFq/$Name-$i.fq") || die "Erreur de creation du fichier $PathFq/$Name-$i.fq\n";
 		foreach my $indice (sort {$a <=> $b} keys %rep_fq) {
 			print FREQ "$indice:$rep_fq{$indice}\n";
 		}
 		close(FREQ);
 		
+		
+		# on écrit la représentation tfid
 		open(FRET,">$PathTF/$Name-$i.tfid") || die "Erreur de creation du fichier $PathTF/$Name-$i.tfid\n";
 		foreach my $indice (sort {$a <=> $b} keys %rep_fq) {
-			my $word = $reverse{$indice};
+			my $word = $reverse{$indice}; # mot correspondant à l'indice
 			my $docF = $df{$word};
 			if($docF!=0){
 				my $tfid = ($rep_fq{$indice}*log($Num/$docF));
@@ -281,6 +300,8 @@ sub representations($$$$$$$$)
 # MAIN PROG #
 #############
 
+
+# Extraction, création de représentations des fichiers CACM
 ExtractionDesFichiers("cacm.all","Docs","CACM");
 FiltrerAlphanum("Docs","CACM","Filtre",3204);
 StopWords("Filtre","CACM",3204,"common_words","STP");
@@ -288,6 +309,7 @@ createVoc("STP","vocabulaire");
 create_df("STP","CACM",3204,"vocabulaire","document_frequency");
 representations("vocabulaire","document_frequency","STP","CACM",3204,"RepBi","RepFq","RepTFID");
 
+# Représentation des Querys dans le même espace que les documents
 ExtractionDesFichiers("query.text","Querys","Query");
 FiltrerAlphanum("Querys","Query","FiltreQ",64);
 StopWords("FiltreQ","Query",64,"common_words","STPQ");
