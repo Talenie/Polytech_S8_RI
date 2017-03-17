@@ -1,3 +1,8 @@
+# Calcule le cosine d'une requête par rapport à un document
+# $fdocument l'adresse du dossier où se trouvent le document
+# $id le numéro du document
+# $ext l'extension de fichier
+# $fquery l'adresse complete du fichier de requete
 sub cosine($$$$) {
 	
 	my ($fdocument, $id, $ext, $fquery)=@_; # Tableau des paramètres 
@@ -53,6 +58,12 @@ sub cosine($$$$) {
 	
 }
 
+# Retourne le fichier $fsortie contenant l'ensemble des $nb premiers documents pertinents pour la requête
+# $nb le nombre de rangs à sortir
+# $dir l'adresse du dossier où se trouvent le document
+# $ext l'extension de fichier
+# $query l'adresse complete du fichier de requete
+# $fsortie l'adresse du fichier de sortie
 sub rank($$$$$) {
 
 	my($nb, $dir, $ext, $query, $fsortie) = @_;	
@@ -60,6 +71,7 @@ sub rank($$$$$) {
 	
 	my %ranking;
 	
+	# boucle pour tous les documents à tester
 	my $i=1;
 	while ($i<=3024) {
 		$ranking{$i} = cosine($dir, $i, $ext, $query);
@@ -68,16 +80,18 @@ sub rank($$$$$) {
 	
 	my $rank = 0;
 	
+	# inversion du hash array afin de récupérer la bonne clé pour la bonne proba
 	my %reverseRanking;
 	foreach my $key (keys %ranking) {
 		$reverseRanking{$ranking{$key}} = $key;
 	}
 	
+	# écriture du fichier de sortie
 	open(FS,">$fsortie") || die "Erreur d'ouverture du fichier $fsortie\n";
 	#print "rank	doc					proba\n";
-	foreach my $value (reverse sort values %ranking) {
+	foreach my $value (reverse sort values %ranking) { # sort sur les probas
 		if($rank++ < $nb) {
-			$key = $reverseRanking{$value};
+			$key = $reverseRanking{$value}; # récupération du nom du document
 			print FS "$rank.	$key	$value\n";
 		};
 	}
