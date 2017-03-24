@@ -54,15 +54,8 @@ int main(int argc, char *argv[])
   /*------------------------------------------------*/
 	
 	float* hist = create_histo(argv[1]);
-	printf("Contenu histogramme\n");
-	printf("BIN	val\n");
-	float sum = 0.0;
-	for(int x = 0; x < NCELL; x++){
-		printf("%3d %f\n",x,hist[x]);
-		sum += hist[x];
-	}
-	
-	printf("Sum : %f\nNBIN : %d\n",sum,NBIN);
+
+	show_histo(hist);
 
   exit(0);
 }

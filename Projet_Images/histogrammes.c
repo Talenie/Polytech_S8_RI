@@ -31,3 +31,17 @@ float* create_histo(char *file){
 	
 	return hist;	
 }
+
+void show_histo(float *hist) {
+	printf("Contenu histogramme\n");
+	printf("BIN	val\n");
+	float sum = 0.0;
+	
+	for(int x = 0; x < NCELL; x++){
+		//printf("%3d %f\n",x,hist[x]);
+		printf("%3d %.*s\n", x, (int)(hist[x]*1000), "███████████████████████████████████████████████████████████████████████");
+		sum += hist[x];
+	}
+	
+	printf("Sum : %f\nNBIN : %d\n",sum,NBIN);
+}
