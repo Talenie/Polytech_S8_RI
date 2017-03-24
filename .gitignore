@@ -18,3 +18,5 @@ Main/RepBiQ/
 Main/RepFq/
 Main/RepFqQ/
 RepTFID/
+*.o
+

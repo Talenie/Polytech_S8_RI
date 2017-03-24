@@ -10,7 +10,7 @@
 
 int main(int argc, char *argv[])
 {
-  int i,j,n,nx,ny,nb;
+  int i,j;
   CIMAGE cim;
   /*------------------------------------------------*/
   /* lecture d'une image requête                    */
