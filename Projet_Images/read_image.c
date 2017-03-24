@@ -12,6 +12,11 @@ int main(int argc, char *argv[])
 {
   int i,j;
   CIMAGE cim;
+  
+  if(argc < 2){
+	  printf("Donner url image\n");
+	  exit(1);
+  }
   /*------------------------------------------------*/
   /* lecture d'une image requête                    */
   /*------------------------------------------------*/

@@ -17,9 +17,9 @@ float* create_histo(char *file){
 	for( int x = 0; x < image.nx; x++) {
 		for (int y = 0; y < image.ny; y++){
 			int r,g,b;
-			r = floor(image.r[x][y]/(NVAL/NBIN));
-			g = floor(image.g[x][y]/(NVAL/NBIN));
-			b = floor(image.b[x][y]/(NVAL/NBIN));
+			r = ((int)image.r[x][y])/(NVAL/NBIN);
+			g = ((int)image.g[x][y])/(NVAL/NBIN);
+			b = ((int)image.b[x][y])/(NVAL/NBIN);
 			hist[ r*NBIN*NBIN + g * NBIN + b]++;
 		}
 	}
