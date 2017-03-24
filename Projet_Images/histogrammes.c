@@ -26,7 +26,7 @@ float* create_histo(char *file){
 	
 	/* Normalisation de l'histogramme */
 	for (int i = 0; i < NCELL; i++){
-		hist[i] /= (float)(image.nx*image.ny*3);	
+		hist[i] /= (float)(image.nx*image.ny);	
 	}
 	
 	return hist;	
