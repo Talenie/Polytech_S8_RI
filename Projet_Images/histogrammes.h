@@ -9,3 +9,4 @@
 void create_all(char *directory);
 float* create_histo(char *file);
 void show_histo(float *hist);
+void show_histo_w(float *hist);
