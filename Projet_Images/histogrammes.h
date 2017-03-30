@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "rdjpeg.h"
+#include "proc.h"
 
 #define NBIN 4
 #define NCELL 64
