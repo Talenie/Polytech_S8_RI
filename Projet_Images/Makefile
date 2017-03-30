@@ -1,12 +1,12 @@
 
 
-all : read_image main
+all : read_image.exe create_histos.exe 
 
-read_image :  rdjpeg.o read_image.o histogrammes.o proc.o
-	gcc rdjpeg.o read_image.o histogrammes.o proc.o -o read_image -lm
+read_image.exe :  rdjpeg.o read_image.o histogrammes.o proc.o
+	gcc rdjpeg.o read_image.o histogrammes.o proc.o -o read_image.exe -lm
 	
-main : rdjpeg.o main.o histogrammes.o proc.o
-	gcc rdjpeg.o main.o histogrammes.o proc.o -o main
+create_histos.exe : rdjpeg.o main.o histogrammes.o proc.o
+	gcc rdjpeg.o main.o histogrammes.o proc.o -o create_histos.exe 
 	
 main.o : main.c
 	gcc -o main.o -c main.c -Wall
@@ -23,4 +23,4 @@ histogrammes.o : histogrammes.c histogrammes.h
 	gcc -o histogrammes.o -c histogrammes.c -Wall -lm
 
 clean :
-	rm *.o main
+	rm *.o *.exe
