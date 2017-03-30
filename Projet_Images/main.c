@@ -8,6 +8,9 @@
 
 
 int main(int argc, char *argv[]){
-	create_all("urls.txt");
+	if(argc < 2){
+		printf("Veuillez rentrer le fichier contenant les chemins d'images dont on doit créer les histogrammes en entrée\n");
+	}
+	create_all(argv[1]);
 	exit(0);
 }
