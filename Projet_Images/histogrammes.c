@@ -1,20 +1,17 @@
 #include "histogrammes.h"
 
-/**
- * Créer tout les historammes et les écris au format binaire dans le fichier "histos.bin"
- */
-void create_all(char *file){
+void create_all(char *files, char* file_out){
 	/* file est le fichier contenant toutes les urls d'images à traiter */
-	FILE *f = fopen(file,"r");
+	FILE *f = fopen(files,"r");
 	if(f==NULL){
-		printf("Histogrammes.create_all : Could not open %s\n",file);
+		printf("Histogrammes.create_all : Could not open %s\n",files);
 		exit(1);
 	}
 	char url[256];
 	float *hist;
-	FILE *out = fopen("histos.bin","w");
+	FILE *out = fopen(file_out,"w");
 	if(f==NULL){
-		printf("Histogrammes.create_all : Could not create histos.bin\n");
+		printf("Histogrammes.create_all : Could not create $s\n",file_out);
 		exit(2);
 	}
 	
@@ -27,7 +24,6 @@ void create_all(char *file){
 	fclose(out);
 	fclose(f);
 }
-
 
 
 
@@ -66,12 +62,11 @@ float dist(float* a, float*b, int size){
 	return res;
 }
 
-
-KEY* create_keys(char* file, char* histogrammes){
+KEY* create_keys(char* file, char* allfiles, char* histogrammes){
 	float* req = create_histo(file);
 	int taille,nbdocs;
-	char** index = readList("urls.txt", &nbdocs);
-	
+	char** index = readList(allfiles, &nbdocs);
+
 	KEY* scores = (KEY*) malloc(sizeof(KEY)*nbdocs);
 	
 	float **hists = readDescriptors(histogrammes, nbdocs, &taille);
@@ -81,9 +76,20 @@ KEY* create_keys(char* file, char* histogrammes){
 		key.k = i;
 		key.d = dist(req,hists[i],taille);
 		scores[i] = key;
+		printf("Key : %d; Score : %f\n",key.k,key.d);
 	}
 	
 	return scores;	
+}
+
+void sort_keys(KEY* keys, int size){
+	qsort(keys, size, sizeof(KEY), keyCompare);
+}
+
+char* getName(int indice, char* allfiles){
+	int nbdocs;
+	char** index = readList(allfiles, &nbdocs);
+	return index[indice];
 }
 
 

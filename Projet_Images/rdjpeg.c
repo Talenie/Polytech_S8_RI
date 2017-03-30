@@ -13,7 +13,7 @@ void read_cimage(char *name, CIMAGE *cim)
   /* commande conversion vers le format PPM          */
   /* djpeg envoie le résultat sur la sortie standard */  
   /*-------------------------------------------------*/  
-  if (strstr(name,"http://") == name) {
+  if (strstr(name,"http://") == name || strstr(name,"https://") == name) {
     asprintf(&command,"wget -O - \"%s\" -o /dev/null | /usr/bin/djpeg ",name);
   } else {
     asprintf(&command,"/usr/bin/djpeg \"%s\"",name);
