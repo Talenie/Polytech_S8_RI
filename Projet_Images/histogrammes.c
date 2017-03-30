@@ -1,7 +1,7 @@
 #include "histogrammes.h"
 
 /**
- * Créer tout les historammes et les écris au format binaire
+ * Créer tout les historammes et les écris au format binaire dans le fichier "histos.bin"
  */
 void create_all(char *file){
 	/* file est le fichier contenant toutes les urls d'images à traiter */
@@ -27,6 +27,9 @@ void create_all(char *file){
 	fclose(out);
 	fclose(f);
 }
+
+
+
 
 float* create_histo(char *file){
 	CIMAGE image;

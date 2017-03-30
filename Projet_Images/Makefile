@@ -2,11 +2,11 @@
 
 all : read_image main
 
-read_image :  rdjpeg.o read_image.o histogrammes.o
-	gcc rdjpeg.o read_image.o histogrammes.o -o read_image -lm
+read_image :  rdjpeg.o read_image.o histogrammes.o proc.o
+	gcc rdjpeg.o read_image.o histogrammes.o proc.o -o read_image -lm
 	
-main : rdjpeg.o main.o histogrammes.o
-	gcc rdjpeg.o main.o histogrammes.o -o main
+main : rdjpeg.o main.o histogrammes.o proc.o
+	gcc rdjpeg.o main.o histogrammes.o proc.o -o main
 	
 main.o : main.c
 	gcc -o main.o -c main.c -Wall
