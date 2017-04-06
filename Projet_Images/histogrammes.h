@@ -7,6 +7,7 @@
 #define NBIN 4
 #define NCELL 64
 #define NVAL 256
+#define NCLUSTER 256
 
 
 /**
@@ -20,6 +21,16 @@
 void create_all(char *files, char* file_out);
 
 /**
+ * Créer tout les histogrammes des fichiers donnée dans file et les écris au format binaire dans le fichier sortie
+ * ---------------------------
+ * Paramètres
+ * ---------------------------
+ * files : le chemin du fichier ayant les noms de toutes les images à traiter
+ * file_out : le nom du fichier de sortie (en binaire) contenant tout les histogrammes crées
+ */
+void create_all_clusters(char *files, char* file_out);
+
+/**
  * Crée l'histogramme de taille NBIN^3 correspondant à l'image donnée en entrée
  * ---------------------------
  * Paramètres
@@ -27,6 +38,8 @@ void create_all(char *files, char* file_out);
  * file : le chemin de l'image à traiter
  */
 float* create_histo(char *file);
+
+float* create_histo_cluster(char *file);
 
 /**
  * Retourne la distance euclidienne entre deux vecteurs
@@ -51,5 +64,5 @@ KEY* create_keys(char* file, char* allfiles, char* histogrammes);
 
 void sort_keys(KEY* keys, int size);
 
-void show_histo(float *hist);
+void show_histo(float *hist, int size);
 void show_histo_w(float *hist);
