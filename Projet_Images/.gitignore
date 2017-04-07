@@ -3,6 +3,8 @@ main
 myurls.txt
 sift/
 images/
+sift
+images
 clean_sift/
 *.exe
 mes_sifts/
