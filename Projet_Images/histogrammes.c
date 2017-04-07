@@ -163,6 +163,21 @@ KEY* create_keys_cluster(char* file, char* allfiles, char* histogrammes){
 	return scores;	
 }
 
+KEY* combine_keys(KEY* color, KEY* cluster, int nbdocs, float pct_color, float pct_sift) {
+	
+	KEY* combine = (KEY*) malloc(sizeof(KEY)*nbdocs);
+	for( int i=0; i<nbdocs; i++ ) {
+		KEY key;
+		key.k = i;
+		key.d = color[i].d * pct_color + cluster[i].d * pct_sift;
+		combine[i] = key;
+		printf("Key : %d; Score : %f\n",key.k,key.d);
+	}
+	
+	return combine;
+	
+}
+
 
 void sort_keys(KEY* keys, int size){
 	qsort(keys, size, sizeof(KEY), keyCompare);

@@ -63,6 +63,8 @@ float dist(float* a, float*b, int size);
 KEY* create_keys(char* file, char* allfiles, char* histogrammes);
 KEY* create_keys_cluster(char* file, char* allfiles, char* histogrammes);
 
+KEY* combine_keys(KEY* color, KEY* cluster, int nbdocs, float pct_color, float pct_sift);
+
 void sort_keys(KEY* keys, int size);
 
 void show_histo(float *hist, int size);
