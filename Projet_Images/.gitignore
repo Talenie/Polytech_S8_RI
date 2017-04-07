@@ -1,6 +1,6 @@
 read_image
 main
 myurls.txt
-clean_sift/
 sift/
 images/
+clean_sift/
