@@ -4,3 +4,5 @@ myurls.txt
 sift/
 images/
 clean_sift/
+*.exe
+mes_sifts/

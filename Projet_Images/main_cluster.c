@@ -14,8 +14,8 @@ int main(int argc, char *argv[]){
 	* */
 	//create_all_clusters("paths_sift.txt","clusters.bin");
 	
-	if(argc < 3){
-		printf("Donner le nom de fichier sift a comparer et le nom du HTML de sortie\n");
+	if(argc < 4){
+		printf("Donner le nom de fichier sift a comparer et le nom du HTML de sortie et le nom de l'image associée au sift\n");
 		exit(1);
 	}	
 	
@@ -30,8 +30,9 @@ int main(int argc, char *argv[]){
 		printf("Erreur de création de %s\n", argv[2]);
 		exit(2);
 	}
+	printf("%s\n",argv[3]);
 	
-	fprintf(out,"<h1>Image requete<h1>\n<img src=\"%s\" style=\"max-width : 500px\">\n<h2>10 premiers Resultats<h2>",argv[1]);
+	fprintf(out,"<h1>Image requete<h1>\n<img src=\"%s\" style=\"max-width : 500px\">\n<h2>10 premiers Resultats<h2>",argv[3]);
 	for(int i = 0; i < 10; i++){
 		fprintf(out,"<p>Key : %d; Score : %f; Name : %s\n</p>",keys[i].k, keys[i].d,index[keys[i].k]);
 		fprintf(out,"<img src=\"%s\" style=\"max-width : 500px\">\n",images[keys[i].k]);

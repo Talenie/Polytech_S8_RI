@@ -147,7 +147,7 @@ KEY* create_keys_cluster(char* file, char* allfiles, char* histogrammes){
 	int taille,nbdocs;
 	char** index = readList(allfiles, &nbdocs);
 
-	KEY* scores = (KEY*) malloc(sizeof(KEY)*nbdocs);
+	KEY* scores = (KEY*) malloc(sizeof(KEY)*nbdocs+1);
 	
 	float **hists = readDescriptors(histogrammes, nbdocs, &taille);
 	
