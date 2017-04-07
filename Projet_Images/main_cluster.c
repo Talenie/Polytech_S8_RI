@@ -7,8 +7,11 @@
 #include "histogrammes.h"
 
 int main(int argc, char *argv[]){
-	//float *hist = create_histo_cluster("/media/alicia/Lexar/COURS/RI/sift/test/1nn/2008_003206.sift");
-	//show_histo(hist,NCLUSTER);
+	/*
+	loat *hist = create_histo_cluster("sift/test/1nn/2008_003206.sift");
+	printf("Coucou\n");
+	show_histo(hist,NCLUSTER);
+	* */
 	//create_all_clusters("paths_sift.txt","clusters.bin");
 	
 	if(argc < 3){
@@ -33,6 +36,8 @@ int main(int argc, char *argv[]){
 		fprintf(out,"<p>Key : %d; Score : %f; Name : %s\n</p>",keys[i].k, keys[i].d,index[keys[i].k]);
 		fprintf(out,"<img src=\"%s\" style=\"max-width : 500px\">\n",images[keys[i].k]);
 	}
+	
+	fclose(out);
 	
 	exit(0);
 }

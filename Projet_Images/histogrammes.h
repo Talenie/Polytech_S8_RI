@@ -61,6 +61,7 @@ float dist(float* a, float*b, int size);
  * histogrammes : le fichier binaire contenant tout les histogrammes des images references
  */
 KEY* create_keys(char* file, char* allfiles, char* histogrammes);
+KEY* create_keys_cluster(char* file, char* allfiles, char* histogrammes);
 
 void sort_keys(KEY* keys, int size);
 

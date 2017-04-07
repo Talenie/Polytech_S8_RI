@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 	
 	float* hist = create_histo(argv[1]);
 
-	show_histo(hist);
+	show_histo(hist,NCELL);
 
   exit(0);
 }

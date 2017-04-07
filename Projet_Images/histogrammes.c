@@ -10,7 +10,7 @@ void create_all(char *files, char* file_out){
 	char url[256];
 	float *hist;
 	FILE *out = fopen(file_out,"w");
-	if(f==NULL){
+	if(out==NULL){
 		printf("Histogrammes.create_all : Could not create %s\n",file_out);
 		exit(2);
 	}
@@ -35,7 +35,7 @@ void create_all_clusters(char *files, char* file_out){
 	char path[256];
 	float *hist;
 	FILE *out = fopen(file_out,"w");
-	if(f==NULL){
+	if(out==NULL){
 		printf("Histogrammes.create_all : Could not create %s\n",file_out);
 		exit(2);
 	}
@@ -158,6 +158,7 @@ KEY* create_keys_cluster(char* file, char* allfiles, char* histogrammes){
 		scores[i] = key;
 		printf("Key : %d; Score : %f\n",key.k,key.d);
 	}
+	
 	
 	return scores;	
 }
