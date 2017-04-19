@@ -19,7 +19,7 @@ int main(int argc, char *argv[]){
 	
 	KEY* keys_color = create_keys(argv[1],"urls.txt","histos.bin"); 
 	KEY* keys_cluster = create_keys_cluster(argv[2],"paths_sift.txt","clusters.bin");
-	KEY* keys_combine = combine_keys(keys_color, keys_cluster, nbdocs, 0.15, 0.85);
+	KEY* keys_combine = combine_keys(keys_color, keys_cluster, nbdocs, 0.85, 0.15);
 	sort_keys(keys_combine,nbdocs);
 	
 	FILE *out = fopen(argv[3],"w");
