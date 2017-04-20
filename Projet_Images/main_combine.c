@@ -31,7 +31,7 @@ int main(int argc, char *argv[]){
 		exit(2);
 	}
 	
-	fprintf(out,"<h1>Image requete<h1>\n<img src=\"%s\" style=\"max-width : 500px\">\n<h2>10 premiers Resultats<h2>",argv[1]);
+	fprintf(out,"<h1>Image requete<h1>\n<img src=\"%s\" style=\"max-height : 300px\">\n<h2>10 premiers Resultats<h2>",argv[1]);
 	fprintf(out,"<table>");
 	fprintf(out,"<tr>");
 	fprintf(out,"<th>Rang</th>");
@@ -44,19 +44,19 @@ int main(int argc, char *argv[]){
 		fprintf(out,"<td>%d</td>", i);
 		
 		fprintf(out,"<td>");
-		fprintf(out,"<img src=\"%s\" style=\"max-width : 300px\">\n",images[keys_color[i].k]);
-		fprintf(out,"<p>Key : %d; Score : %f; Name : %s\n</p>",keys_color[i].k, keys_color[i].d,index[keys_color[i].k]);
+		fprintf(out,"<img src=\"%s\" style=\"width : 200px; height : 200px\">\n",images[keys_color[i].k]);
+		//fprintf(out,"<p>Key : %d; Score : %f; Name : %s</p>",keys_color[i].k, keys_color[i].d,index[keys_color[i].k]);
 		fprintf(out,"</td>");
 		
 		fprintf(out,"<td>");
-		fprintf(out,"<img src=\"%s\" style=\"max-width : 300px\">\n",images[keys_cluster[i].k]);
-		fprintf(out,"<p>Key : %d; Score : %f; Name : %s\n</p>",keys_cluster[i].k, keys_cluster[i].d,index[keys_cluster[i].k]);
+		fprintf(out,"<img src=\"%s\" style=\"width : 200px; height : 200px\">\n",images[keys_cluster[i].k]);
+		//fprintf(out,"<p>Key : %d; Score : %f; Name : %s</p>",keys_cluster[i].k, keys_cluster[i].d,index[keys_cluster[i].k]);
 		fprintf(out,"</td>");
 		
 		fprintf(out,"<td>");
-		fprintf(out,"<img src=\"%s\" style=\"max-width : 300px\">\n",images[keys_combine[i].k]);
-		fprintf(out,"<p>Key : %d; Score : %f; Name : %s\n</p>",keys_combine[i].k, keys_combine[i].d,index[keys_combine[i].k]);
-		fprintf(out,"/<td>");
+		fprintf(out,"<img src=\"%s\" style=\"width : 200px; height : 200px\">\n",images[keys_combine[i].k]);
+		//printf(out,"<p>Key : %d; Score : %f; Name : %s</p>",keys_combine[i].k, keys_combine[i].d,index[keys_combine[i].k]);
+		fprintf(out,"</td>");
 	}
 	
 	fprintf(out,"</table>");
